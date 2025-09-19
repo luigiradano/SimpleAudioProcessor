@@ -1,0 +1,32 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-O2",
+      "-c",
+      "-o",
+      "build/main.o",
+      "main.c"
+    ],
+    "directory": "/home/luigi/Codice/SimpleAudioProcessor",
+    "file": "/home/luigi/Codice/SimpleAudioProcessor/main.c",
+    "output": "/home/luigi/Codice/SimpleAudioProcessor/build/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-O2",
+      "-c",
+      "-o",
+      "build/cmplx_math.o",
+      "cmplx_math.c"
+    ],
+    "directory": "/home/luigi/Codice/SimpleAudioProcessor",
+    "file": "/home/luigi/Codice/SimpleAudioProcessor/cmplx_math.c",
+    "output": "/home/luigi/Codice/SimpleAudioProcessor/build/cmplx_math.o"
+  }
+]
