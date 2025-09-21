@@ -35,6 +35,6 @@ void fillHistogramDb(Histogram_t* hist, float value, float maxValue, size_t inde
 void freeHistogram(Histogram_t* hist);
 
 void fillHistogramLog(Histogram_t* hist, float value, float maxVal, size_t index);
-uint8_t checkQuiteEvent();
+uint8_t checkQuitEvent();
 
 #endif

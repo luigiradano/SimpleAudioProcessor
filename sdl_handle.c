@@ -151,7 +151,7 @@ void freeHistogram(Histogram_t* hist) {
   free(hist->rects);
 }
 
-uint8_t checkQuiteEvent() {
+uint8_t checkQuitEvent() {
   SDL_Event e;
 
   while (SDL_PollEvent(&e)) {

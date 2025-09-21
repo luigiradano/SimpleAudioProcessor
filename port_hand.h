@@ -14,7 +14,8 @@ void initPA(uint16_t device, uint32_t audioBuffSize, uint32_t ringBuffSize, uint
 void startStream();
 void stopStream();
 void quitPA();
-cmplx_rb_t* getAudioRingBuff();
+cmplx_rb_t* getAudioInRingBuff();
+cmplx_rb_t* getAudioOutRingBuff();
 #endif
 
 

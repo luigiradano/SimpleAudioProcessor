@@ -1,4 +1,5 @@
 #include "cmplx_math.h"
+#include <stddef.h>
 
 cmplx_f_t sum(cmplx_f_t a, cmplx_f_t b) {
   cmplx_f_t out = {a.x + b.x, a.y + b.y};
@@ -206,3 +207,22 @@ void printBuffHealth(cmplx_rb_t *buff){
 
   buff->runState = BUFF_NORMAL;
 }
+
+
+void scaleArray(cmplx_fa_t* array, float scale){
+  for(size_t i = 0; i < array->length; i ++){
+    cmplx_f_t tmp = getElement(array, i);
+    setElement(array, i, (cmplx_f_t){tmp.x * scale, tmp.y * scale});
+  }
+}
+
+cmplx_fa_t copyArray(cmplx_fa_t input){
+  cmplx_fa_t out = initArray(input.length);
+
+  for(size_t i = 0; i < input.length; i ++){
+    out.data[i] = input.data[i];
+  }
+
+  return out;
+}
+

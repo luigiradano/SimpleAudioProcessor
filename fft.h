@@ -17,4 +17,6 @@ void fftSwap(cmplx_fa_t* array, size_t size);
 uint16_t reverseBit(uint16_t data, uint16_t size);
 
 cmplx_fa_t computeFftButter(cmplx_fa_t input);
+
+cmplx_fa_t computeIFftButter(cmplx_fa_t input);
 #endif  // !FFT_INC

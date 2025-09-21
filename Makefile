@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -O2
+CFLAGS = -O2
 
 build: main_o cmplx_math_o fft_o sdl_handle_o port_hand_o
 	gcc build/main.o build/cmplx_math.o build/fft.o build/sdl_handle.o build/port_hand.o -o main -lm -lSDL2 -lportaudio 

@@ -61,7 +61,10 @@ void print_cmplx_f(cmplx_f_t num);
  *   @brief Swaps two elements
  */
 void swapCmpx(cmplx_f_t*a, cmplx_f_t* b);
-
+/**
+ *  @brief  Gets the angle (argument) of a complex number
+ */
+//float getArg(cmplx_f_t data);
 
 // Array handling
 
@@ -95,6 +98,8 @@ int sumArray(cmplx_fa_t* a, cmplx_fa_t* b, cmplx_fa_t* out);
  */
 int mulArray(cmplx_fa_t* a, cmplx_fa_t* b, cmplx_fa_t* out);
 
+void scaleArray(cmplx_fa_t* array, float scale);
+
 /*
  *     @brief  Returns the element at index from the array
  */
@@ -115,6 +120,7 @@ void printCmplx_fa(cmplx_fa_t array);
  */
 void moveToIdx(cmplx_fa_t* a, size_t toMove, size_t toHere);
 
+cmplx_fa_t copyArray(cmplx_fa_t input);
 // Ring buffer handling
 typedef enum{
   BUFF_NOT_VISITED,
