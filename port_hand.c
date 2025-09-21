@@ -1,37 +1,36 @@
 #include "port_hand.h"
+#include "main.h"
 
 PaStream* stream = NULL;
-cmplx_fa_t dataBuff;
+cmplx_rb_t dataBuff;
 
 static int pa_callback(const void* inputBuffer, void* outputBuffer, uint64_t framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* transData){
   
-  float* tmp = (float*) inputBuffer;
-  cmplx_f_t* tmpOut = dataBuff.data;
+  float* inputDataF = (float*) inputBuffer;
+  cmplx_rb_t* localBuffer = (cmplx_rb_t*) transData;
 
-  if(tmp == NULL || tmpOut == NULL){
+  if(inputDataF == NULL || localBuffer == NULL){
     for(uint32_t i = 0; i < framesPerBuffer; i ++){
-      tmpOut[i].x = 0;
-      tmpOut[i].y = 0;
+      appendBuff((cmplx_f_t){0,0}, localBuffer);
     }
     return paContinue;
   }
 
   for(uint32_t i = 0; i < framesPerBuffer; i ++){
-    tmpOut[i].x = tmp[i];
-    tmpOut[i].y = 0;
+      appendBuff((cmplx_f_t){inputDataF[i],0}, localBuffer);
   }
 
   return 0;
 }
 
-void initPA(uint16_t device, uint32_t buffSize, uint32_t sampleRate){
+void initPA(uint16_t device, uint32_t audioBuffSize, uint32_t ringBuffSize, uint32_t sampleRate){
   PaError err = Pa_Initialize();
   if(err != paNoError){
     fprintf(stderr, "Error in PA init!\n");
     exit(3);
   }
   
-  dataBuff = initArray(buffSize);
+  dataBuff = initRingBuff(ringBuffSize);
 
   PaStreamParameters inputParams;
   inputParams.device = device;
@@ -44,10 +43,10 @@ void initPA(uint16_t device, uint32_t buffSize, uint32_t sampleRate){
           &inputParams,   /* input parameters */
           NULL,           /* no output */
           sampleRate,
-          buffSize,       /* frames per buffer */
+          audioBuffSize,       /* frames per buffer */
           paNoFlag,
           pa_callback,    /* your callback function */
-          dataBuff.data        /* user data */
+          &dataBuff        /* user data */
       );
 
   if(err != paNoError){
@@ -68,12 +67,9 @@ void stopStream(){
 
 void quitPA(){
   Pa_CloseStream(stream);
-  delArray(&dataBuff);
+  delRingBuff(&dataBuff);
 }
 
-cmplx_fa_t getBuff(){
-  return dataBuff;
-}
-cmplx_f_t* getBuffRaw(){
-  return dataBuff.data;
+cmplx_rb_t* getAudioRingBuff(){
+  return &dataBuff;
 }

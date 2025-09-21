@@ -6,13 +6,15 @@
 
 typedef struct {
   float vertScale;
+  float offset;
   float autoScaleFact;
+  float maxVal;
+  float minVal;
+  float avgVal;
   int sumRectW;
-  uint8_t underflow;
-  uint8_t overflow;
+  uint16_t underflow;
+  uint16_t overflow;
   size_t fullLen;
-  int16_t maxH;
-  int16_t  minH;
   SDL_Rect* rects;
 
 } Histogram_t;
@@ -32,6 +34,7 @@ void drawHistogram(Histogram_t* hist);
 void fillHistogramDb(Histogram_t* hist, float value, float maxValue, size_t index);
 void freeHistogram(Histogram_t* hist);
 
+void fillHistogramLog(Histogram_t* hist, float value, float maxVal, size_t index);
 uint8_t checkQuiteEvent();
 
 #endif

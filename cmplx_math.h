@@ -115,4 +115,51 @@ void printCmplx_fa(cmplx_fa_t array);
  */
 void moveToIdx(cmplx_fa_t* a, size_t toMove, size_t toHere);
 
+// Ring buffer handling
+typedef enum{
+  BUFF_NOT_VISITED,
+  BUFF_READ,
+  BUFF_WRITE
+} visitState_t; 
+
+typedef enum{
+  BUFF_NORMAL,
+  BUFF_OVERRUN,
+  BUFF_UNDERRUN,
+} runState_t;
+
+typedef struct {
+  cmplx_fa_t array;
+  size_t writeIndex;
+  size_t readIndex;
+  runState_t runState;
+  visitState_t* visited;
+} cmplx_rb_t; // Complex ring buffer type
+
+/**
+*   @brief  Initializes a ring buffer of a given size
+*/
+cmplx_rb_t initRingBuff(size_t buffSize);
+
+/**
+  * @brief  Deletes and frees the memory used by a ring buffer
+  */
+void delRingBuff(cmplx_rb_t* buff);
+
+/**
+*  @brief   Writes the data value to the buffer
+*/
+void appendBuff(cmplx_f_t data, cmplx_rb_t* buff);
+
+/**
+*  @brief   Reads 1 element from the buffer
+*/
+cmplx_f_t extractBuff(cmplx_rb_t* buff);
+
+/**
+*  @brief   Returns an array object with the given length. This is accomplished reading elements from the last readindex up to readindex + length 
+*/
+void getDataBuff(cmplx_rb_t* buff, cmplx_fa_t* out);
+
+void printBuffHealth(cmplx_rb_t* buff);
 #endif  // !CMPLX_MATH_INC
