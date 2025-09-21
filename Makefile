@@ -1,7 +1,7 @@
 CFLAGS = -Wall -Wextra -O2
 
-build: main_o cmplx_math_o fft_o
-	gcc build/main.o build/cmplx_math.o build/fft.o -o main -lm -lSDL2 -lportaudio 
+build: main_o cmplx_math_o fft_o sdl_handle_o port_hand_o
+	gcc build/main.o build/cmplx_math.o build/fft.o build/sdl_handle.o build/port_hand.o -o main -lm -lSDL2 -lportaudio 
 
 build_folder: 
 	mkdir -p build
@@ -18,7 +18,14 @@ cmplx_math_o: cmplx_math.c cmplx_math.h | build_folder
 fft_o: fft.c fft.h cmplx_math.h | build_folder
 	gcc $(CFLAGS) -c fft.c -o build/fft.o
 
-debug:
-	gcc main.c cmplx_math.c -o main -lm -lSDL2 -lportaudio
+sdl_handle_o: sdl_handle.c sdl_handle.h | build_folder
+	gcc $(CFLAGS) -c sdl_handle.c -o build/sdl_handle.o
+
+port_hand_o: port_hand.c port_hand.h | build_folder
+	gcc $(CFLAGS) -c port_hand.c -o build/port_hand.o
+
+debug: CFLAGS += -g
+debug: clean build
+debug: 
 	gdb main
 

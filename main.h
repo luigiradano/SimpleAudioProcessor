@@ -6,5 +6,7 @@
 
 #include "cmplx_math.h"
 #include "fft.h"
+#include "port_hand.h"
+#include "sdl_handle.h"
 
 #endif

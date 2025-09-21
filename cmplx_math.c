@@ -79,7 +79,7 @@ int mulArray(cmplx_fa_t* a, cmplx_fa_t* b, cmplx_fa_t* out) {
 cmplx_f_t getElement(cmplx_fa_t* array, size_t index) {
   cmplx_f_t err = {0, 0};
 
-  if (index < 0 || index > array->length) {
+  if (index > array->length) {
     fprintf(stderr, "Invalid array access R!\n");
     return err;
   }
@@ -87,8 +87,9 @@ cmplx_f_t getElement(cmplx_fa_t* array, size_t index) {
 }
 
 int setElement(cmplx_fa_t* array, size_t index, cmplx_f_t value) {
-  if (index < 0 || index > array->length) {
+  if (index > array->length) {
     fprintf(stderr, "Invalid array access W!\n");
+    exit(1);
     return CMPLX_ERR;
   }
 
@@ -125,6 +126,7 @@ void moveToIdx(cmplx_fa_t* a, size_t toMove, size_t toHere){
 
   while(repeatSwap > 0){
     swapCmpx(&a->data[toMove], &a->data[toMove-1]);
+    toMove --;
     repeatSwap --;
   }
 }
