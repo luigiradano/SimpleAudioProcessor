@@ -98,13 +98,13 @@ void butterCombine(cmplx_fa_t* input, cmplx_fa_t* out, size_t offset, size_t siz
 }
 
 cmplx_fa_t computeFftButter(cmplx_fa_t input) {
-  int bitCount = log(input.length) / log(2), layer = 1, currSize = 2;
+  size_t bitCount = log(input.length) / log(2), layer = 1, currSize = 2;
 
   // Step 0: Allocate intermediate arrays
   cmplx_fa_t *interArray = NULL, out;
   interArray = malloc(sizeof(cmplx_fa_t) * (bitCount+1));
 
-  for (int i = 0; i < bitCount + 1; i++) {
+  for (size_t i = 0; i < bitCount + 1; i++) {
     interArray[i] = initArray(input.length);
   }
 
