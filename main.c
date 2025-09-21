@@ -3,14 +3,24 @@
 #include "fft.h"
 #include "sdl_handle.h"
 
-#define SIZE 2048
+#define SIZE_DEF 2048 
 
-int main() {
+int main(int argc, char* argv[]) {
+
+  uint32_t SIZE = SIZE_DEF;
 
   cmplx_fa_t out;
   Histogram_t hist;
 
+  if(argc > 1)
+  initPA(atoi(argv[1]), SIZE, 44100);
+    else
   initPA(5, SIZE, 44100);
+
+  if(argc > 2)
+    SIZE = atoi(argv[2]);
+    
+
   initSDL(1920, 1080);
 
   setupHistogram(&hist, SIZE/2);
