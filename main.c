@@ -47,15 +47,18 @@ int main(int argc, char* argv[]) {
   expectedCallbackFreq = (float) SAMPLE_RATE / fftBinsTotal;
 
   for(size_t i = 0; i < fftBinsTotal; i ++){
-    const float notchFreq = 5000;
-    const float notchWidth = 25;
+    const float notchFreq = atoi(argv[3]);
+    const float sigma = atof(argv[4]);
+    float normFreq = notchFreq / (SAMPLE_RATE/2.0f);
     float modIdx = (float) i / fftBinsTotal;
-    float value = 1 - notchWidth * pow(modIdx - (notchFreq / (SAMPLE_RATE/2.0f)), 2);
+
+    float value = pow(2, (-pow(modIdx - normFreq, 2)/(2*sigma*sigma)));
+
     if(value <= 0){
       value = 0;
     }
 //    setElement(&convolute, i, (cmplx_f_t){(float)pow(10, modIdx)/10,0});
-    setElement(&convolute, i, (cmplx_f_t){value, 1});
+    setElement(&convolute, i, (cmplx_f_t){1, 0});
   }
 
   // Start the PortAudio callback
