@@ -8,5 +8,6 @@
 #include "fft.h"
 #include "port_hand.h"
 #include "sdl_handle.h"
+#include "histogram_sdl.h"
 
 #endif

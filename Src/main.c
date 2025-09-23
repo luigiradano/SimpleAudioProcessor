@@ -1,11 +1,11 @@
-#include "main.h"
+#include "../Inc/main.h"
 
 #include <SDL2/SDL_timer.h>
 #include <stddef.h>
 #include <stdint.h>
 
-#include "fft.h"
-#include "sdl_handle.h"
+#include "../Inc/fft.h"
+#include "../Inc/sdl_handle.h"
 
 #define SIZE_DEF 16
 #define RB_TO_FFT_SIZE 3
@@ -20,8 +20,8 @@ int main(int argc, char* argv[]) {
   Histogram_t hist;
 
   // Initialize the program
-  initSDL(1920, 1080);
 
+  initSDL(1200, 1000);
   // Command line parameters
   if (argc > 2){
     fftBinsTotal = atoi(argv[2]);
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
     initPA(5, fftBinsTotal, fftBinsTotal*RB_TO_FFT_SIZE, SAMPLE_RATE);
 
 
-  setupHistogram(&hist, fftBinsTotal / 2);
+  setupHistogram(&hist, fftBinsTotal / 2, (SDL_Rect){0,100,1000,100});
 
   input = initArray(fftBinsTotal);
   convolute = initArray(fftBinsTotal);
@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
     }
     maxVal = hist.maxVal;
 
-    drawHistogram(&hist);
+    drawHistogram(&hist, getRendSDL());
 
     delArray(&outFft);
 
@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
     float secondsElapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
 
     // Print debug info
-    printBuffHealth(inputRB);
+//    printBuffHealth(inputRB);
     //printf("FPS: %.0fHz\t Max: %.2f\n", 1 / secondsElapsed, maxVal);
   }
 

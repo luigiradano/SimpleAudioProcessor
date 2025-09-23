@@ -1,61 +1,6 @@
-#include "sdl_handle.h"
+#include "../Inc/histogram_sdl.h"
 
-//#define DEBUG_AG
-
-SDL_Window* win = NULL;
-SDL_Surface* screenSurf = NULL;
-SDL_Renderer* rend = NULL;
-uint32_t winW, winH;
-
-void initSDL(uint32_t width, uint32_t height) {
-  winW = width;
-  winH = height;
-
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    fprintf(stderr, "Error initializing SDL!\n");
-    exit(2);
-  }
-
-  win = SDL_CreateWindow("FFT from scratch",
-                         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                         width, height,
-                         SDL_WINDOW_SHOWN);
-
-  if (win == NULL) {
-    fprintf(stderr, "Error opening SDL window!\n");
-    exit(2);
-  }
-
-  // screenSurf = SDL_GetWindowSurface(win);
-
-  rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-}
-
-void quitSDL() {
-  SDL_DestroyWindow(win);
-  SDL_Quit();
-}
-
-SDL_Window* getWinSDL() {
-  return win;
-}
-
-SDL_Surface* getSurfSDL() {
-  return screenSurf;
-}
-
-SDL_Renderer* getRendSDL() {
-  return rend;
-}
-
-uint32_t getWinH() {
-  return winH;
-}
-uint32_t getWinW() {
-  return winH;
-}
-
-void setupHistogram(Histogram_t* hist, size_t fullLen) {
+void setupHistogram(Histogram_t* hist, size_t fullLen, SDL_Rect size) {
   hist->vertScale = 20;
   hist->autoScaleFact = 1;
   hist->sumRectW = 0;
@@ -64,6 +9,7 @@ void setupHistogram(Histogram_t* hist, size_t fullLen) {
   hist->maxVal = 0;
   hist->minVal = 0;
   hist->avgVal = 0;
+  hist->histDims = size;
   hist->offset = 0.4;
   hist->fullLen = fullLen;
   hist->rects = (SDL_Rect*)malloc(sizeof(SDL_Rect) * fullLen);
@@ -79,9 +25,9 @@ void fillHistogramLog(Histogram_t* hist, float value, float maxVal, size_t index
   if (tmp > 0 && !isinf(tmp))
     fillHistogram(hist, hist->offset + log10(tmp), index);
 
-  if (!isinf(value) > hist->maxVal)
+  if (!isinf(value) && value > hist->maxVal)
     hist->maxVal = value;
-  if (!isinf(value) < hist->minVal)
+  if (!isinf(value) && value < hist->minVal)
     hist->minVal = value;
 
   hist->avgVal += value;
@@ -116,24 +62,28 @@ void fillHistogram(Histogram_t* hist, float value, size_t index) {
   rectH = hist->vertScale * value;
 
   // Auto scaling logic
-  if (rectH > getWinH())
+  if (rectH > hist->histDims.h){
     hist->overflow++;
-  if (rectH < 1)
+    rectH = hist->histDims.h;
+  }
+  if (rectH < 1){
     hist->underflow++;
+    rectH = 1;
+  }
 
-  //  rectW = floorf((float)getWinW() * (100.0f / (39.0f * hist->fullLen)) * pow(10.0f, (float)-index / (hist->fullLen)));
-  //  float sumW = 1.0f///;
-  rectW = floorf(getWinW() * (1.0f - pow(10, -1.0f / hist->fullLen))) * pow(10, -(index / hist->fullLen));
+  rectW = floorf(hist->histDims.w * (1.0f - pow(10, -1.0f / hist->fullLen))) * pow(10, -((float) index / hist->fullLen));
 
-  hist->rects[index].x = hist->sumRectW;
-  hist->rects[index].y = getWinH() - rectH;
+  if(rectW + hist->sumRectW <= hist->histDims.w){
+  hist->rects[index].x = hist->histDims.x + hist->sumRectW;
+  hist->rects[index].y = (hist->histDims.y + hist->histDims.h) - rectH;
   hist->rects[index].w = rectW;
   hist->rects[index].h = rectH;
+  }
 
   hist->sumRectW += rectW * 1.1;
 }
 
-void drawHistogram(Histogram_t* hist) {
+void drawHistogram(Histogram_t* hist, SDL_Renderer* rend) {
   SDL_SetRenderDrawColor(rend, 0, 0, 0, 255);
   SDL_RenderClear(rend);
 
@@ -151,14 +101,4 @@ void freeHistogram(Histogram_t* hist) {
   free(hist->rects);
 }
 
-uint8_t checkQuitEvent() {
-  SDL_Event e;
 
-  while (SDL_PollEvent(&e)) {
-    if (e.type == SDL_QUIT) {
-      return 1;
-      printf("Exiting\n");
-    }
-  }
-  return 0;
-}

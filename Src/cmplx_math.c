@@ -1,4 +1,4 @@
-#include "cmplx_math.h"
+#include "../Inc/cmplx_math.h"
 #include <stddef.h>
 
 cmplx_f_t sum(cmplx_f_t a, cmplx_f_t b) {

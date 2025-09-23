@@ -1,6 +1,6 @@
-#include "port_hand.h"
+#include "../Inc/port_hand.h"
 
-#include "main.h"
+#include "../Inc/main.h"
 
 PaStream* stream = NULL;
 cmplx_rb_t inputBuff;

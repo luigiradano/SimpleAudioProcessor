@@ -16,7 +16,13 @@ void fftSwap(cmplx_fa_t* array, size_t size);
 */
 uint16_t reverseBit(uint16_t data, uint16_t size);
 
-cmplx_fa_t computeFftButter(cmplx_fa_t input);
+/**
+*   @brief  Computes the FFT of the input complex valued array
+*
+*   @param  tmpArray  This array is used to store intermediate results, passed this way allocations are not required on each call
+*   @param  output    This array is where the final output will be, passed this way to avoid allocations 
+*/
+void computeFftButter(cmplx_fa_t input, cmplx_fa_t tmpArray, cmplx_fa_t output);
 
 cmplx_fa_t computeIFftButter(cmplx_fa_t input);
 #endif  // !FFT_INC
